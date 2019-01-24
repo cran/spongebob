@@ -1,8 +1,9 @@
-a784ae400e1c5df2fefa6ac4f061ebd6 *DESCRIPTION
+d6b9341f2d32fb84e5eecc6efe92abae *DESCRIPTION
 2d2c52826ad5b6e7a398361eae924f69 *LICENSE
 7b4cc45873d9d5aed50daf0455ce5576 *NAMESPACE
-1576f26f0945852b15a490d83d7fb551 *R/spongebob.R
-4a78eb7226c7e0970091bc30468a3080 *README.md
-6e0fa4080cd1743a39d00547266f9921 *man/tospongebob.Rd
+4d6890baceacc66feef975928d28fd8b *NEWS.md
+d1613a5df276d7853d567f1fb3920623 *R/spongebob.R
+131315f96b00b0370b41fee5e7741d12 *README.md
+d09faa8bc72b4405d7216b3669a8b636 *man/tospongebob.Rd
 eb57537717bfa43627b80036a88757f5 *tests/testthat.R
-d6d669fadd17da3f2fc023f5df4e0750 *tests/testthat/test_spongebob.R
+d3579be462635940cc55ef85eae038f2 *tests/testthat/test_spongebob.R

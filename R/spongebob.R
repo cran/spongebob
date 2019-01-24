@@ -1,47 +1,77 @@
-#' @title sPOnGEBoB-caSE cONVersIon
+#' @title Spongebob-Case Conversion : sPOngEBOb-CasE cOnVErsIoN
 #' @name tospongebob
-#' @description trAnSLaTe ChARAcTers IN chARaCter veCToRS tO sPONgebOB caSe.
-#' @param x a ChaRActeR vECtOr.
-#' @return a CharAcTeR VECtOR oF THe SamE LeNGTh AS \code{x}.
+#' @description Translate character vectors to spongebob case.
+#'
+#' trAnSLatE ChaRacTeR veCtOrS To SponGebOB CaSE
+#' @param x a character vector. A CHarACTer vEcToR.
+#' @return A character vector of the same length as \code{x}.
+#'
+#' a ChaRaCteR vecTor OF The SAme LenGth As \code{x}.
 #' @examples
-#' tospongebob("spongebob-case conversion")
+#' tospongebob("Spongebob-Case Conversion")
 #' tospongebob(x = c(
-#'     "translate characters in character vectors to spongebob case.",
+#'     "Translate character vectors to spongebob case.",
 #'     "a character vector.",
-#'     "a character vector of the same length as"
+#'     "A character vector of the same length as"
 #' ))
 #' @export
 tospongebob <- function(x) {
-    vapply(
-        x
+
+    # Input validation
+    if (!is.character(x)) {
+        msg <- "Input to tospongebob is not a character vector."
+        stop(paste(msg, tospongebob(msg)))
+    }
+
+    # Vectorized apply to transform each character string
+    vapply(x
+
+        # For one string
         , FUN = function(s) {
+
+            # Split up string into characters
             chars <- unlist(strsplit(s, split = character(0)))
-            lengthSeq <- {
-                seq <- c()
-                while (sum(seq) < length(chars)) {
-                    nextval <- sample(1:3, 1, prob = c(0.4, 0.35, 0.25))
-                    if (sum(seq) + nextval <= length(chars)) {
-                        seq <- c(seq, nextval)
-                    }
+
+            # Get indices of alphabetic characters
+            alphaInds <- grep('[[:alpha:]]', chars)
+
+            # Generate a random sequence of 1-, 2-, or 3-length subsequences
+            # that sum up to the number of alphabetic characters
+            # We will alternate casing of these
+            phi <- (1 + sqrt(5))/2 # Golden ratio
+            probVec <- c(0.5, 0.5/phi, 0.5/phi^2) # sums to 1
+            lengthSeq <- c()
+            while (sum(lengthSeq) < length(alphaInds)) {
+                nextval <- sample(1:3, 1, prob = probVec)
+                if (sum(lengthSeq) + nextval <= length(alphaInds)) {
+                    lengthSeq <- c(lengthSeq, nextval)
                 }
-                seq
             }
-            newChars <- c()
-            lower <- TRUE
+
+            # Iterating through the generated subsquences
+            lower <- sample(c(TRUE, FALSE), 1) # Initialize starting case
             for (segInd in seq_along(lengthSeq)) {
-                startInd <- sum(lengthSeq[1:segInd-1]) + 1
-                endInd <- sum(lengthSeq[1:segInd])
-                newChars <- c(newChars, {
-                    if (lower) {
-                        tolower(chars[startInd:endInd])
-                    } else {
-                        toupper(chars[startInd:endInd])
-                    }})
+
+                # Find the start and end indices by counting and then finding
+                # the original indices of that alphabetic-character index
+                startInd <- alphaInds[sum(lengthSeq[1:segInd-1]) + 1]
+                endInd <- alphaInds[sum(lengthSeq[1:segInd])]
+
+                # Replace characters with lower or uppercase versions
+                if (lower) {
+                    chars[startInd:endInd] <- tolower(chars[startInd:endInd])
+                } else {
+                    chars[startInd:endInd] <- toupper(chars[startInd:endInd])
+                }
+
+                # Flip case for next iteration
                 lower <- !lower
             }
-            return(paste(newChars, collapse = ""))
-        }
-        , character(1)
+
+            return(paste(chars, collapse = ""))
+        } # end FUN for one string
+
+        , FUN.VALUE = character(1)
         , USE.NAMES = FALSE
     )
 }
